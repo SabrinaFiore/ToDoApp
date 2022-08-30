@@ -9,23 +9,17 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
+import TableHead from '@mui/material/TableHead';
 
 const Home = () => {
   const [todoItem, setTodoItem] = useState("");
-  const [addDetailItem, setTaddDetailItem] = useState([
-    {
-      id: '0',
-      message: 'Red Color',
-      done: false,
-    },
-  ]);
-
   const [items, setItems] = useState([
     {
       id: '1234',
       message: 'Buy Milk',
-      done: false,
       date: new Date().toLocaleString("en-US"),
+      button: 'delete',
+      displayRow: true
     },
   ]);
 
@@ -35,9 +29,10 @@ const Home = () => {
       setItems([{
         id: uuidv4(),
         message: todoItem,
-        done: false,
         date: new Date().toLocaleString("en-US"),
-      },  
+        button: 'delete',
+        displayRow: true
+      },   
       ...items]);
       setTodoItem("");
     }
@@ -45,18 +40,17 @@ const Home = () => {
 
   const handleToggle = (id) => {
     const _items = items.map((item) => {
+      const copy = [...items];
+      let index = copy.indexOf(item, 0)
       if (item.id === id) {
-        return {
-          ...item,
-          done: item.done === false ? true : false
-        };
+        item.displayRow = false;
+        console.log("item", index)
+        return copy.splice(index, 1);
       }
-      console.log(item.done)
       return item;
     })
 
     setItems(_items);
-    console.log("ENTRA")
   };
 
 
@@ -87,21 +81,28 @@ const Home = () => {
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Item</TableCell>
+                <TableCell>Insertion date</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
-              {items.map(({id, message, date, done, time}) => ( 
-                  <TableRow key={id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell>{message}</TableCell>
-                    <TableCell>Insertion date <b>{date}</b></TableCell>
-                    <TableCell>
-                      <Button
-                        type="button"
-                        variant="outlined"
-                        color="error"
-                        size="small"
-                        className={(done === true ? 'done' : '')}
-                      >Delete</Button>
-                    </TableCell>
-                  </TableRow>
+              {items.map(({id, message, date, button}) => ( 
+                <TableRow key={id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell>{message}</TableCell>
+                  <TableCell><b>{date}</b></TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      onClick={() => handleToggle(id)}
+                    >{button}</Button>
+                  </TableCell>
+                </TableRow>
               ))}
             </TableBody>
           </Table>
