@@ -15,11 +15,18 @@ const Home = () => {
   const [todoItem, setTodoItem] = useState("");
   const [items, setItems] = useState([
     {
-      id: '1234',
-      message: 'Buy Milk',
+      id: '1',
+      message: 'Buy Dress',
       date: new Date().toLocaleString("en-US"),
       button: 'delete',
-      displayRow: true
+      displayRow: true,
+      detail: [
+        {
+          id: '1',
+          color: 'petrol green',
+          button: 'Add'
+        }
+      ]
     },
   ]);
 
@@ -31,7 +38,14 @@ const Home = () => {
         message: todoItem,
         date: new Date().toLocaleString("en-US"),
         button: 'delete',
-        displayRow: true
+        displayRow: true,
+        detail: [
+          {
+            id: uuidv4(),
+            color: 'petrol green',
+            button: 'Add'
+          }
+        ]
       },   
       ...items]);
       setTodoItem("");
@@ -89,7 +103,8 @@ const Home = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map(({id, message, date, button}) => ( 
+              {items.map(({id, message, date, button, displayRow}) => ( 
+                displayRow === true &&
                 <TableRow key={id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell>{message}</TableCell>
                   <TableCell><b>{date}</b></TableCell>
