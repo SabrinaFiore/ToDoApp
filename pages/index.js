@@ -92,7 +92,7 @@ const Home = () => {
                 <TableRow>
                   <TableCell>Item</TableCell>
                   <TableCell>Insertion date</TableCell>
-                  <TableCell>Add Details</TableCell>
+                  <TableCell sx={{ paddingLeft: 0 }}>Add Details</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>

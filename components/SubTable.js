@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 
 const SubTable = () => {
 	const [todoItemDetail, setTodoItemDetail] = useState("");
-  const [itemsDetails, setItemsDetails] = useState([{ id: '0', message: '', displayDetailRow: false}]);
+  const [itemsDetails, setItemsDetails] = useState([{ id: '0', message: '', button: 'Delete', displayDetailRow: false}]);
 
 	// ADD ITEMS DETAILS
 	const handleAddDetails = () => {
@@ -20,10 +20,26 @@ const SubTable = () => {
 			{
 				id: uuidv4(),
 				message: todoItemDetail,
+				button: 'Delete',
 				displayDetailRow: true
 			}
 		])
 	};
+
+	const handleToggleDetails = (id) => {
+    const _items = itemsDetails.map((item) => {
+      const copy = [...itemsDetails];
+      let index = copy.indexOf(item, 0)
+      if (item.id === id) {
+        item.displayRow = false;
+        console.log("item", index)
+        return copy.splice(index, 1);
+      }
+      return item;
+    })
+
+    setItemsDetails(_items)
+  };
 
 	return (
 		<Box sx={{ width: '100%' }}>
@@ -34,7 +50,7 @@ const SubTable = () => {
 						value={todoItemDetail} 
 						onChange={(e) => setTodoItemDetail(e.target.value)}
 						id="standard-basic" label="Add Details" 
-						variant="standard" />
+						variant="outlined" />
 					<Button 
 						type="button" 
 						variant="text"
@@ -44,10 +60,19 @@ const SubTable = () => {
 						disabled={!todoItemDetail}
 					>Add</Button>
 				</div>
-				<TableBody sx={{ marginLeft: 0 }}>
-					{itemsDetails.map(({id, message, displayDetailRow}) => ( displayDetailRow === true && 
+				<TableBody margin='none'>
+					{itemsDetails.map(({id, message, button, displayDetailRow}) => ( displayDetailRow === true && 
 						<TableRow key={id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 							<TableCell sx={{ paddingLeft: 0 }}>{message}</TableCell>
+							<TableCell>
+								<Button
+									type="button"
+									variant="outlined"
+									color="error"
+									size="small"
+									onClick={() => handleToggleDetails(id)}
+								>{button}</Button>
+							</TableCell>
 						</TableRow>
 					))}
 				</TableBody>
