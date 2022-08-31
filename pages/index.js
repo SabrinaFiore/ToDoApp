@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Box, Container, GlobalStyles, Stack, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -12,48 +12,43 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 
 const Home = () => {
+  const [showRow, setShowRow] = useState("");
   const [todoItem, setTodoItem] = useState("");
-  const [items, setItems] = useState([
-    {
-      id: '1',
-      message: 'Buy Dress',
-      date: new Date().toLocaleString("en-US"),
-      button: 'delete',
-      displayRow: true,
-      detail: [
-        {
-          id: '1',
-          color: 'petrol green',
-          button: 'Add'
-        }
-      ]
-    },
-  ]);
+  const [items, setItems] = useState([{ id: '1', message: '', date: '', button: '', displayRow: false}]);
 
+  useEffect(() => {
+    window.localStorage.setItem('sf_toDoList', JSON.stringify(items))
+  }, [items])
+
+  useEffect(() => {
+    const data = window.localStorage.getItem('sf_toDoList')
+    console.log("data BEFORE IF",JSON.parse(data))
+    if (data) {
+      console.log("data AFTER IF",JSON.parse(data))
+      setItems(JSON.parse(data))
+    }
+  }, [])
+  
   // ADD ITEMS
   const handleAdd = () => {
-    if(todoItem) {
-      setItems([{
+    setTodoItem("");
+    setShowRow(true)
+
+    setItems([
+      ...items, 
+      {
         id: uuidv4(),
         message: todoItem,
         date: new Date().toLocaleString("en-US"),
         button: 'delete',
         displayRow: true,
-        detail: [
-          {
-            id: uuidv4(),
-            color: 'petrol green',
-            button: 'Add'
-          }
-        ]
-      },   
-      ...items]);
-      setTodoItem("");
-    }
+      }
+    ])
   };
 
   const handleToggle = (id) => {
     const _items = items.map((item) => {
+      setShowRow(false)
       const copy = [...items];
       let index = copy.indexOf(item, 0)
       if (item.id === id) {
@@ -64,11 +59,9 @@ const Home = () => {
       return item;
     })
 
-    setItems(_items);
+    setItems(_items)
   };
 
-
-  // ADD ITEMS DETAILS
 
   return (
     <div>
@@ -81,7 +74,7 @@ const Home = () => {
               type="text" 
               value={todoItem} 
               onChange={(e) => setTodoItem(e.target.value)}
-              id="standard-basic" label="Standard" 
+              id="standard-basic" label="Add Items" 
               variant="standard" />
               <Button 
                 type="button" 
@@ -89,6 +82,7 @@ const Home = () => {
                 variant="text"
                 color="success"
                 size="small"
+                disabled={!todoItem}
               >Add</Button>
           </Stack>
         </Box>
@@ -102,24 +96,23 @@ const Home = () => {
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {items.map(({id, message, date, button, displayRow}) => ( 
-                displayRow === true &&
-                <TableRow key={id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell>{message}</TableCell>
-                  <TableCell><b>{date}</b></TableCell>
-                  <TableCell>
-                    <Button
-                      type="button"
-                      variant="outlined"
-                      color="error"
-                      size="small"
-                      onClick={() => handleToggle(id)}
-                    >{button}</Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+              <TableBody>
+                {items.map(({id, message, date, button, displayRow}) => ( displayRow === true && showRow === true &&
+                  <TableRow key={id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>{message}</TableCell>
+                    <TableCell><b>{date}</b></TableCell>
+                    <TableCell>
+                      <Button
+                        type="button"
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        onClick={() => handleToggle(id)}
+                      >{button}</Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
           </Table>
         </TableContainer>
       </Container>
