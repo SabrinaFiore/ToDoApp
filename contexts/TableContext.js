@@ -5,7 +5,7 @@ const AppContext = createContext();
 
 export function AppWrapper({children}) {
 	const [state, dispatch] = useReducer(AppReducer, initialState)
-	console.log("STATE FROM TableContext", state)
+	console.log("STATE FROM TableContext", initialState)
 
 	const sharedState = useMemo(() => {
 		return { state, dispatch }
