@@ -17,7 +17,8 @@ export function AppWrapper({children}) {
 			dispatch({
 				type: 'load_items',
 				// value: JSON.parse(localStorage.getItem('sf_toDoList'))
-				value: JSON.parse(data)
+				// ERROR: SyntaxError: "undefined" is not valid JSON
+				value: "JSON.parse(data)"
 			})
 		}
 	}, [])

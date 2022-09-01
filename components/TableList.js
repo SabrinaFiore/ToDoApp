@@ -17,8 +17,8 @@ const TableList = () => {
   const [showRow, setShowRow] = useState("");
   const [todoItem, setTodoItem] = useState("");
   const [disableBtn, setDisableBtn] = useState("");
-  const [items, setItems] = useState([{ id: '0', message: '', date: '', button: '', displayRow: false}]);
-  const { state, dispatch } = useAppContext(items)
+  const [items, setItems] = useState([]);
+  const { state, dispatch } = useAppContext()
   
   // ADD ITEMS
   const handleAdd = e => {
@@ -62,7 +62,6 @@ const TableList = () => {
   };
 
   const handleToggle = (id) => {
-    dispatch({ type: 'Delete', value: items });
     const _items = items.map((item) => {
       const copy = [...items];
       let index = copy.indexOf(item, 0)
@@ -71,7 +70,7 @@ const TableList = () => {
         // setShowRow(false)
         item.displayRow = false;
         copy.splice(index, 1);
-        dispatch({ type: 'Delete', value: item });
+        dispatch({ type: 'Delete', value: copy });
       }
       return item;
     })
