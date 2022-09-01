@@ -7,7 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import theme from '../src/theme';
 import createEmotionCache from '../src/createEmotionCache';
-import ContextWrapper from '../components/ContextWrapper';
+import { AppWrapper } from '../contexts/TableContext';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -23,9 +23,9 @@ export default function MyApp(props, navigation) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <ContextWrapper navigation={navigation}>
+        <AppWrapper>
           <Component {...pageProps} />
-        </ContextWrapper>
+        </AppWrapper>
       </ThemeProvider>
     </CacheProvider>
   );

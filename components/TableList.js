@@ -18,19 +18,19 @@ const TableList = () => {
   const [disableBtn, setDisableBtn] = useState("");
   const [items, setItems] = useState([{ id: '0', message: '', date: '', button: '', displayRow: false}]);
 
-  useEffect(() => {
-    window.localStorage.setItem('sf_toDoList', JSON.stringify(items))
-  }, [items])
+  // useEffect(() => {
+  //   window.localStorage.setItem('sf_toDoList', JSON.stringify(items))
+  // }, [items])
 
-  useEffect(() => {
-    const data = window.localStorage.getItem('sf_toDoList')
-    if (data) {
-      setItems(JSON.parse(data))
-    }
-    if (data.length > 1) {
-      window.localStorage.clear();
-    }
-  }, [])
+  // useEffect(() => {
+  //   const data = window.localStorage.getItem('sf_toDoList')
+  //   if (data) {
+  //     setItems(JSON.parse(data))
+  //   }
+  //   if (data.length > 1) {
+  //     window.localStorage.clear();
+  //   }
+  // }, [])
   
   // ADD ITEMS
   const handleAdd = e => {
