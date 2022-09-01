@@ -15,48 +15,58 @@ import SubTable from '../components/SubTable';
 const Home = () => {
   const [showRow, setShowRow] = useState("");
   const [todoItem, setTodoItem] = useState("");
-  const [disableButton, setDisableButton] = useState(false);
+  const [disableBtn, setDisableBtn] = useState("");
   const [items, setItems] = useState([{ id: '0', message: '', date: '', button: '', displayRow: false}]);
 
   useEffect(() => {
     window.localStorage.setItem('sf_toDoList', JSON.stringify(items))
-    window.localStorage.clear();
   }, [items])
 
   useEffect(() => {
     const data = window.localStorage.getItem('sf_toDoList')
-    console.log("data LOCALSTORAGE BEFORE",JSON.parse(data))
     if (data) {
-      console.log("data LOCALSTORAGE AFTER",JSON.parse(data))
       setItems(JSON.parse(data))
+    }
+    if (data.length > 1) {
+      window.localStorage.clear();
     }
   }, [])
   
   // ADD ITEMS
-  const handleAdd = () => {
+  const handleAdd = e => {
+    let dt = new Date().toLocaleString();
+
     setTodoItem("");
     setShowRow(true);
-
-    setItems([
-      ...items, 
+    setItems([ 
       {
         id: uuidv4(),
         message: todoItem,
         date: new Date().toLocaleString("en-US"),
         button: 'delete',
         displayRow: true,
-      }
+      },
+      ...items, 
     ])
 
     items.map((item) => {
       if (item.message === todoItem) {
-        console.log("item.message", item.message)
-        console.log("todoItem", todoItem)
-        setDisableButton(true)
+        setDisableBtn(true)
         item.displayRow = false;
+        setItems([ 
+          {
+            id: item.id,
+            message: item.message,
+            date: item.date,
+            button: 'delete',
+            displayRow: true,
+          },
+          ...items
+        ])
+        items.sort((_a, _b) => dt > item.date ? -1: 1)
       }
       if (item.message !== todoItem) {
-        setDisableButton(false)
+        setDisableBtn(false)
       }
     })
   };
@@ -66,10 +76,9 @@ const Home = () => {
       setShowRow(false)
       const copy = [...items];
       let index = copy.indexOf(item, 0)
-      console.log("index", index)
+      
       if (item.id === id) {
         item.displayRow = false;
-        console.log("item", index)
         return copy.splice(index, 0);
       }
       return item;
@@ -92,11 +101,11 @@ const Home = () => {
           variant="standard" />
           <Button 
             type="button" 
-            onClick={() => handleAdd(todoItem)}
+            onClick={handleAdd}
             variant="text"
             color="success"
             size="small"
-            disabled={disableButton === true || !todoItem}
+            disabled={!todoItem}
           >Add</Button>
       </Stack>
       </Box>

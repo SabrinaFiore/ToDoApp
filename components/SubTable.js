@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 
 const SubTable = () => {
-	const [todoItemDetail, setTodoItemDetail] = useState("");
+const [todoItemDetail, setTodoItemDetail] = useState("");
   const [itemsDetails, setItemsDetails] = useState([{ id: '0', message: '', button: 'Delete', displayDetailRow: false}]);
 
 	// ADD ITEMS DETAILS
