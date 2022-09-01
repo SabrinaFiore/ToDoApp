@@ -24,6 +24,22 @@ const [todoItemDetail, setTodoItemDetail] = useState("");
 				displayDetailRow: true
 			}
 		])
+
+		itemsDetails.map((item) => {
+      if (item.message === todoItemDetail) {
+        item.displayRow = false;
+        setItemsDetails([ 
+          {
+            id: item.id,
+            message: item.message,
+            date: item.date,
+            button: 'delete',
+            displayRow: true,
+          },
+          ...itemsDetails
+        ])
+      }
+    })
 	};
 
 	const handleToggleDetails = (id) => {
