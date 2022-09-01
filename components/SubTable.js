@@ -60,7 +60,7 @@ const SubTable = () => {
 						disabled={!todoItemDetail}
 					>Add</Button>
 				</div>
-				<TableBody margin='none'>
+				{/* <TableBody margin='none'> */}
 					{itemsDetails.map(({id, message, button, displayDetailRow}) => ( displayDetailRow === true && 
 						<TableRow key={id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 							<TableCell sx={{ paddingLeft: 0 }}>{message}</TableCell>
@@ -75,7 +75,7 @@ const SubTable = () => {
 							</TableCell>
 						</TableRow>
 					))}
-				</TableBody>
+				{/* </TableBody> */}
 			</Stack>
 		</Box>
 	)
