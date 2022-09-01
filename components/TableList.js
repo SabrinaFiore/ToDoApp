@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Box,Stack, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -11,30 +11,19 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import SubTable from './SubTableList';
+import { useAppContext } from '../contexts/TableContext';
 
 const TableList = () => {
   const [showRow, setShowRow] = useState("");
   const [todoItem, setTodoItem] = useState("");
   const [disableBtn, setDisableBtn] = useState("");
   const [items, setItems] = useState([{ id: '0', message: '', date: '', button: '', displayRow: false}]);
-
-  // useEffect(() => {
-  //   window.localStorage.setItem('sf_toDoList', JSON.stringify(items))
-  // }, [items])
-
-  // useEffect(() => {
-  //   const data = window.localStorage.getItem('sf_toDoList')
-  //   if (data) {
-  //     setItems(JSON.parse(data))
-  //   }
-  //   if (data.length > 1) {
-  //     window.localStorage.clear();
-  //   }
-  // }, [])
+  const { state, dispatch } = useAppContext(items)
   
   // ADD ITEMS
   const handleAdd = e => {
     let dt = new Date().toLocaleString();
+    dispatch({ type: 'Add', value: items });
 
     setTodoItem("");
     setShowRow(true);
@@ -73,6 +62,7 @@ const TableList = () => {
   };
 
   const handleToggle = (id) => {
+    dispatch({ type: 'Delete', value: items });
     const _items = items.map((item) => {
       const copy = [...items];
       let index = copy.indexOf(item, 0)
@@ -80,8 +70,8 @@ const TableList = () => {
       if (item.id === id) {
         // setShowRow(false)
         item.displayRow = false;
-        console.log("item", index)
         copy.splice(index, 1);
+        dispatch({ type: 'Delete', value: item });
       }
       return item;
     })
